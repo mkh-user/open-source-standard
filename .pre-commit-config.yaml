@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-json
+      - id: check-merge-conflict
+        args: ["--assume-in-merge"]
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: forbid-submodules
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: pretty-format-json
+        args: ["--autofix"]
+      - id: trailing-whitespace
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.1
+    hooks:
+    - id: markdownlint-cli2
+      args: ["--config", ".markdownlint.yml" ,"--fix"]
+  - repo: local
+    hooks:
+    - id: generate-nav
+      name: Generate navigation
+      entry: ./docs_generate_nav.py
+      language: python
+      files: 'docs/standards/.*\.md$'
+      pass_filenames: false
+      always_run: false
+      additional_dependencies:
+        - tomli
+        - tomli-w

@@ -1,0 +1,40 @@
+* text=auto eol=lf
+
+*.md text diff=markdown
+*.json text
+*.yml text
+*.yaml text
+*.toml text
+
+*.html text diff=html
+*.css text diff=css
+*.scss text diff=scss
+*.jsx text diff=javascript
+*.tsx text diff=typescript
+
+*.ini text
+*.cfg text
+*.editorconfig text
+*.gitignore text
+*.gitattributes text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.pdf binary
+
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+*.gz binary
+
+*.mmd text diff=markdown
