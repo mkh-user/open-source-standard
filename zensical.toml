@@ -123,3 +123,30 @@ combine_header_slug = true
 custom_checkbox = true
 
 [project.markdown_extensions.pymdownx.tilde]
+
+[[project.nav]]
+Guides = [
+    "indexes/guides/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/guide.md",
+] },
+]
+
+[[project.nav]]
+Specifications = [
+    "indexes/specs/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/spec.md",
+] },
+]
+
+[[project.nav]]
+Templates = [
+    "indexes/templates/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/template.md",
+] },
+]
