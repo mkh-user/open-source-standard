@@ -9,6 +9,7 @@ STANDARDS_ROOT = DOCS_DIR / "standards"
 CONFIG_FILE = Path("zensical.toml")
 PLACEHOLDER = "contents_placeholder"
 NAV_KEY = "nav"
+NAV_STRUCTURE_KEY = "nav_structure"
 INDEXES_DIR = "indexes"
 
 def to_title_case(kebab_str: str) -> str:
@@ -91,6 +92,57 @@ def build_nav_section(doc_type: str, tree: dict) -> list:
 
     return items
 
+def clean_structure(data):
+    def is_index_only(value):
+        if not isinstance(value, list):
+            return False
+        if len(value) != 1:
+            return False
+        return isinstance(value[0], str) and value[0].endswith("index.md")
+
+    def is_empty_dict(value):
+        return isinstance(value, dict) and len(value) == 0
+
+    def clean_recursive(obj):
+        if isinstance(obj, dict):
+            result = {}
+            for key, value in obj.items():
+                cleaned = clean_recursive(value)
+                if cleaned is not None:
+                    result[key] = cleaned
+            if len(result) == 0:
+                return None
+            return result
+        elif isinstance(obj, list):
+            result = []
+            for item in obj:
+                cleaned = clean_recursive(item)
+                if cleaned is not None:
+                    result.append(cleaned)
+
+            if len(result) == 0:
+                return None
+            if len(result) == 1 and isinstance(result[0], str) and result[0].endswith("index.md"):
+                return None
+            return result
+        else:
+            return obj
+
+    def deep_clean(obj):
+        while True:
+            new_obj = clean_recursive(obj)
+            if new_obj is None:
+                return None
+            if isinstance(new_obj, list):
+                if len(new_obj) == 1 and isinstance(new_obj[0], str) and new_obj[0].endswith("index.md"):
+                    return None
+            if new_obj == obj:
+                return new_obj
+            obj = new_obj
+
+    return deep_clean(data)
+
+
 def scan_standards():
     """Main function to scan standards and build navigation"""
     if not STANDARDS_ROOT.exists():
@@ -113,12 +165,14 @@ def scan_standards():
         section_items = [global_index] + section_items
         nav_list.append({display_name: section_items})
 
+    nav_list = clean_structure(nav_list)
     return nav_list
 
 def update_config(nav_structure):
-    """Update zensical.toml: replace placeholder or set nav key"""
+    """Update zensical.toml: replace placeholder in nav_structure and set nav"""
     if not CONFIG_FILE.exists():
-        config = {"project": {NAV_KEY: nav_structure}}
+        # Create new config with both nav and nav_structure
+        config = {"project": {NAV_KEY: nav_structure, NAV_STRUCTURE_KEY: []}}
         with open(CONFIG_FILE, "wb") as f:
             tomli_w.dump(config, f)
         return
@@ -129,15 +183,22 @@ def update_config(nav_structure):
     if "project" not in config:
         config["project"] = {}
 
-    if NAV_KEY in config["project"]:
-        existing = config["project"][NAV_KEY]
-        if isinstance(existing, list) and PLACEHOLDER in existing:
-            index = existing.index(PLACEHOLDER)
-            new_nav = existing[:index] + nav_structure + existing[index+1:]
-            config["project"][NAV_KEY] = new_nav
-        else:
-            config["project"][NAV_KEY] = nav_structure
+    # Read base nav structure from nav_structure key, fallback to nav
+    nav_structure_base = config["project"].get(NAV_STRUCTURE_KEY)
+    if nav_structure_base is None:
+        # If nav_structure doesn't exist, use current nav as base and save it for future
+        nav_structure_base = config["project"].get(NAV_KEY, [])
+        config["project"][NAV_STRUCTURE_KEY] = nav_structure_base
+
+    # Replace placeholder in the base structure
+    if isinstance(nav_structure_base, list) and PLACEHOLDER in nav_structure_base:
+        index = nav_structure_base.index(PLACEHOLDER)
+        new_nav = nav_structure_base[:index] + nav_structure + nav_structure_base[index+1:]
+        config["project"][NAV_KEY] = new_nav
     else:
+        # Placeholder not found: warn and keep nav unchanged (or optionally overwrite with base)
+        print(f"WARNING: Placeholder '{PLACEHOLDER}' not found in {NAV_STRUCTURE_KEY}. Replacing {NAV_KEY} with generated tree.", file=sys.stderr)
+        # If you want to overwrite nav with the base structure (without placeholder), uncomment:
         config["project"][NAV_KEY] = nav_structure
 
     with open(CONFIG_FILE, "wb") as f:
@@ -153,7 +214,7 @@ def main():
         sys.exit(0)
 
     update_config(nav_structure)
-    print(f"DONE: Updated {CONFIG_FILE} with navigation structure")
+    print(f"DONE: Updated {CONFIG_FILE} with navigation structure (using {NAV_STRUCTURE_KEY} as base)")
 
 if __name__ == "__main__":
     main()

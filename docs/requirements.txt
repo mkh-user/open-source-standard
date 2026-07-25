@@ -1,0 +1,2 @@
+zensical==0.0.45
+tomli_w==1.2.0

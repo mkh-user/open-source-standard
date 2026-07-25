@@ -4,6 +4,36 @@ site_description = "Standards and best practices for structure and maintenance o
 site_author = "Mahan Khalili"
 site_url = "https://mkh-user.github.io/open-source-standard"
 copyright = "<a href=\"https://github.com/mkh-user/open-source-standard\">Open Source Standard</a> © 2026 by\n<a href=\"https://github.com/mkh-user\">Mahan Khalili</a> is licensed under\n<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>\n<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">\n<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">\n<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">\n"
+nav_structure = [
+    "contents_placeholder",
+]
+
+[[project.nav]]
+Guides = [
+    "indexes/guides/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/guide.md",
+] },
+]
+
+[[project.nav]]
+Specifications = [
+    "indexes/specs/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/spec.md",
+] },
+]
+
+[[project.nav]]
+Templates = [
+    "indexes/templates/index.md",
+    { Internals = [
+    "standards/internals/index.md",
+    "standards/internals/open-source-standards/template.md",
+] },
+]
 
 [project.theme]
 favicon = "images/favicon.svg"
@@ -123,30 +153,3 @@ combine_header_slug = true
 custom_checkbox = true
 
 [project.markdown_extensions.pymdownx.tilde]
-
-[[project.nav]]
-Guides = [
-    "indexes/guides/index.md",
-    { Internals = [
-    "standards/internals/index.md",
-    "standards/internals/open-source-standards/guide.md",
-] },
-]
-
-[[project.nav]]
-Specifications = [
-    "indexes/specs/index.md",
-    { Internals = [
-    "standards/internals/index.md",
-    "standards/internals/open-source-standards/spec.md",
-] },
-]
-
-[[project.nav]]
-Templates = [
-    "indexes/templates/index.md",
-    { Internals = [
-    "standards/internals/index.md",
-    "standards/internals/open-source-standards/template.md",
-] },
-]
