@@ -78,6 +78,7 @@ This standard specifies a three-part structure for every standard, stored in ded
     - front-matter (YAML) with `title`.
     - `# Template: [Standard Title]` – Main title.
     - A Markdown code block containing the entire template (e.g., a skeleton `README.md`, a `.github/ISSUE_TEMPLATE.md`, etc.).
+        - When a template contains multiple code files, level 2 headings *must* be added before each one to show what is it and a **horizontal rule** after each one.
     - `## How to Fill This Template` – A short explanation of what each placeholder (e.g., `[PROJECT_NAME]`) means and how to replace it.
 - **Tone**: Concise and instructional.
 
