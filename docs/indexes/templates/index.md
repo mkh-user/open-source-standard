@@ -4,7 +4,7 @@ icon: lucide/book-dashed
 
 <!-- markdownlint-disable MD043 -->
 
-# Template
+# Templates
 
 This section provides copy-pasteable skeletons implemented based on each standard.
 
